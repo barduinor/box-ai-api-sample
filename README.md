@@ -4,8 +4,8 @@ style="margin-left:-10px;"
 width=40%;>
 
 
-# Sample application using the Box Python SDK and oAuth 2.0
-This application is a template to get you started quickly with the Box Python SDK and oAuth 2.0.
+# Sample app for Box AI API
+This application is a sample to showcase the usage of the Box AI API.
 
 
 ## Box configuration steps
