@@ -37,7 +37,7 @@ def main():
 
     box_ai = AI(client)
 
-    # answer_history = []
+    answer_history = []
 
     while True:
         prompt = inquirer.text(
@@ -59,7 +59,7 @@ def main():
         )
 
         print(f"\nAnswer:\n{answer.answer}\n")
-        # answer_history.append(answer)
+        answer_history.append(answer)
 
         # AI.ask_streamed() example using an iterator
         # answers = box_ai.ask_streamed(
