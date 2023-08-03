@@ -66,7 +66,6 @@ class AI(Cloneable):
         items: [AIItem],
         mode: str = "single_item_qa",
         dialogue_history: [AIAnswer] = None,
-        is_streamed: bool = False,
     ) -> AIAnswer:
         """
         Ask the AI a question.
@@ -85,9 +84,6 @@ class AI(Cloneable):
         :param dialogue_history:
             Dialogue history contains the previous prompts
             and answers from the same item(s)
-        :param is_streamed:
-            Whether or not to return the entire answer at once (false)
-            or by token (true). Default is false.
 
         :returns:
             An AIAnswer object containing the answer to your question.
@@ -116,12 +112,13 @@ class AI(Cloneable):
                         "prompt": dialogue.prompt,
                     }
                 )
-        ai_question["config"] = {"is_streamed": is_streamed}
+        ai_question["config"] = {"is_streamed": False}
 
         data = json.dumps(ai_question)
         # print(data)
 
-        box_response = self._session.post(url, data=data)
+        box_response = self._session.post(url, data=data, expect_json_response=True)
+
         response = box_response.json()
         response_object = self.translator.translate(
             session=self._session,
@@ -134,3 +131,77 @@ class AI(Cloneable):
             completion_reason=response_object["completion_reason"],
             prompt=prompt,
         )
+
+    @api_call
+    def ask_streamed(
+        self,
+        prompt: str,
+        items: [AIItem],
+        mode: str = "single_item_qa",
+        dialogue_history: [AIAnswer] = None,
+    ) -> AIAnswer:
+        """
+        Ask the AI a question.
+
+        :param prompt:
+            The question you wish to ask about your document or content.
+        :param items:
+            This is an array of AIItem objects that describe the file
+            or content you wish to add to your context.
+        :param mode:
+            This tells Box AI what type of request you will be making
+            “single_item_qa” - Ask a question about a single document
+            “text_gen” - generate text based on a single item
+            “multiple_item_qa” - Ask a question about a group of items.
+            This is not yet fully implemented, so you may experience issues.
+        :param dialogue_history:
+            Dialogue history contains the previous prompts
+            and answers from the same item(s)
+
+        :returns:
+            An AIAnswer object containing the answer to your question.
+        """
+        url = self.get_url("ai/ask")
+
+        # build the ai question object
+        ai_question = {}
+        ai_question["prompt"] = prompt
+        ai_question["items"] = []
+        for item in items:
+            ai_question["items"].append(
+                {
+                    "type": item.item_type,
+                    "id": item.item_id,
+                }  # , "content": item.content}
+            )
+        ai_question["mode"] = mode
+        if dialogue_history is not None:
+            ai_question["dialogue_history"] = []
+            for dialogue in dialogue_history:
+                ai_question["dialogue_history"].append(
+                    {
+                        "answer": dialogue.answer,
+                        "created_at": dialogue.created_at,
+                        "prompt": dialogue.prompt,
+                    }
+                )
+        ai_question["config"] = {"is_streamed": False}
+
+        data = json.dumps(ai_question)
+        # print(data)
+
+        box_response = self._session.post(url, data=data, expect_json_response=False)
+
+        for chunk in box_response.network_response.request_response.iter_lines():
+            if chunk:
+                response_object = self.translator.translate(
+                    session=self._session,
+                    response_object=json.loads(chunk),
+                )
+
+                yield AIAnswer(
+                    answer=response_object["answer"],
+                    created_at=response_object["created_at"],
+                    completion_reason=response_object.get("completion_reason"),
+                    prompt=prompt,
+                )

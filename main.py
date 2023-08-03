@@ -37,11 +37,12 @@ def main():
 
     box_ai = AI(client)
 
-    answer_history = []
+    # answer_history = []
 
     while True:
         prompt = inquirer.text(
-            message="What would you like to know about this document? (type stop to exit or restart to start again):"
+            message="What would you like to know about this document?\n"
+            + " (type stop to exit or restart to start again)\n:"
         ).execute()
 
         if prompt == "stop":
@@ -54,11 +55,25 @@ def main():
             prompt=prompt,
             items=[item],
             mode="single_item_qa",
-            dialogue_history=answer_history,
-            is_streamed=False,
+            dialogue_history=None,
         )
+
         print(f"\nAnswer:\n{answer.answer}\n")
-        answer_history.append(answer)
+        # answer_history.append(answer)
+
+        # AI.ask_streamed() example using an iterator
+        # answers = box_ai.ask_streamed(
+        #     prompt=prompt,
+        #     items=[item],
+        #     mode="single_item_qa",
+        #     dialogue_history=answer_history,
+        # )
+        # print("\nAnswer:\n")
+        # for answer in answers:
+        #     print(f"{answer.answer}", end="")
+        #     if "." in answer.answer:
+        #         print("\n")
+        #     answer_history.append(answer)
 
 
 if __name__ == "__main__":
