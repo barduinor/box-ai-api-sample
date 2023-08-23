@@ -1,10 +1,8 @@
-"""main.py"""
-
 import logging
 
 from InquirerPy import inquirer
 
-from app.box_ai import AI, AIItem
+from app.box_ai import AI, AIItem, QAMode
 
 from app.config import AppConfig
 
@@ -26,18 +24,17 @@ def main():
     client = get_client(conf)
 
     # user = client.user().get()
-    print("==================")
-    print("AI Ask Demo")
-    print("==================")
+    print("\n------------")
+    print("AI Ask Demo - Single Item QA")
+    print("------------")
 
     file_selection = select_file(client)
-    item = AIItem(item_id=file_selection.item_id, item_type=file_selection.item_type)
-
-    # file_context = extra_context()
+    item = AIItem(
+        item_id=file_selection.item_id,
+        item_type=file_selection.item_type,
+    )
 
     box_ai = AI(client)
-
-    answer_history = []
 
     while True:
         prompt = inquirer.text(
@@ -51,29 +48,13 @@ def main():
         if prompt == "restart":
             main()
 
-        answer = box_ai.ask(
+        answer = box_ai.ask_item(
+            mode=QAMode.SINGLE_ITEM_QA,
             prompt=prompt,
             items=[item],
-            mode="single_item_qa",
-            dialogue_history=None,
         )
 
         print(f"\nAnswer:\n{answer.answer}\n")
-        answer_history.append(answer)
-
-        # AI.ask_streamed() example using an iterator
-        # answers = box_ai.ask_streamed(
-        #     prompt=prompt,
-        #     items=[item],
-        #     mode="single_item_qa",
-        #     dialogue_history=answer_history,
-        # )
-        # print("\nAnswer:\n")
-        # for answer in answers:
-        #     print(f"{answer.answer}", end="")
-        #     if "." in answer.answer:
-        #         print("\n")
-        #     answer_history.append(answer)
 
 
 if __name__ == "__main__":

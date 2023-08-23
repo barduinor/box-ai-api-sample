@@ -52,7 +52,15 @@ code .
 
 > Update the CLIENT_ID and CLIENT_SECRET field values in the env file with the Box application client id and client secret you created on the developer console.
 
-## Run the application 
+## Samples
+
+There are 4 samples in this application:
+* [Single Item QA](sample_single_item_qa.py)
+* [Single Item QA Streamed](sample_single_item_qa_streamed.py)
+* [Text Generation](sample_text_gen.py)
+* [Text Generation Streamed](sample_text_gen_streamed.py)
+
+Enjoy
 
 
 ```bash
@@ -68,4 +76,4 @@ The authorization token last for 60 minutes, and the refresh toke for 60 days.
 If you get stuck, you can delete the .outh.json file and reauthorize the application.
 
 ### Questions
-If you get stuck or have questions, make sure to ask on our [Box Developer Forum](https://support.box.com/hc/en-us/community/topics/360001932973-Platform-and-Developer-Forum)
+If you get stuck or have questions, make sure to ask on our [Box Developer Forum](https://forum.box.com)

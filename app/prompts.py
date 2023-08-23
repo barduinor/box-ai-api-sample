@@ -10,18 +10,14 @@ from app.box_content import get_folder_items
 class SimpleItem:
     """simple item to hold id and type"""
 
-    def __init__(
-        self, item_id: str, item_type: str, item_name: str, parent_folder_id: str
-    ) -> None:
+    def __init__(self, item_id: str, item_type: str, item_name: str, parent_folder_id: str) -> None:
         self.item_id = item_id
         self.item_type = item_type
         self.item_name = item_name
         self.parent_folder_id = parent_folder_id
 
     def __str__(self):
-        return (
-            f"{self.item_type} {self.item_id} {self.item_name} {self.parent_folder_id}"
-        )
+        return f"{self.item_type} {self.item_id} {self.item_name} {self.parent_folder_id}"
 
 
 def get_choices_by_folder(client: Client, folder_id: str) -> [Choice]:
@@ -59,9 +55,7 @@ def get_choices_by_folder(client: Client, folder_id: str) -> [Choice]:
                 )
             )
 
-    choices.append(
-        Choice(SimpleItem("-9", "folder", "Exit", parent_folder_id), name="Exit")
-    )
+    choices.append(Choice(SimpleItem("-9", "folder", "Exit", parent_folder_id), name="Exit"))
     return choices
 
 
@@ -90,6 +84,6 @@ def select_file(client: Client, current_folder: str = "0") -> SimpleItem:
             return selection
 
 
-def extra_context() -> str:
+def get_manual_context(prompt: str) -> str:
     """file context prompt"""
-    return inquirer.text(message="Add some context about this file:").execute()
+    return inquirer.text(message=prompt).execute()
