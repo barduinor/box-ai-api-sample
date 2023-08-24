@@ -63,6 +63,8 @@ def main():
             print(f"{answer.answer}", end="")
             sleep(0.1)  # just for effect ;)
             dialogue_history.append(answer)
+            if answer.completion_reason == "done":
+                print("\n")
 
 
 if __name__ == "__main__":

@@ -58,6 +58,8 @@ def main():
         for answer in answers:
             print(f"{answer.answer}", end="")
             sleep(0.1)  # just for effect ;)
+            if answer.completion_reason == "done":
+                print("\n")
 
 
 if __name__ == "__main__":
