@@ -136,7 +136,7 @@ class AI(Cloneable):
         ai_question_json = ai_question.to_json()
         ai_question_json["config"] = {"is_streamed": False}
         data = json.dumps(ai_question_json)
-        print(data)
+        # print(data)
 
         url = self.get_url("ai/ask")
         box_response = self._session.post(url, data=data, expect_json_response=True)
@@ -158,7 +158,7 @@ class AI(Cloneable):
         ai_question_json = ai_question.to_json()
         ai_question_json["config"] = {"is_streamed": True}
         data = json.dumps(ai_question_json)
-        print(data)
+        # print(data)
 
         url = self.get_url("ai/ask")
         box_response = self._session.post(url, data=data, expect_json_response=False)
