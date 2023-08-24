@@ -132,9 +132,13 @@ class AI(Cloneable):
         # pylint:disable=no-self-use
         return self._session.get_url(endpoint, *args)
 
-    def _get_ai_api_response(self, prompt, data) -> AIAnswer:
-        url = self.get_url("ai/ask")
+    def _get_ai_api_response(self, prompt: str, ai_question: AIQuestion) -> AIAnswer:
+        ai_question_json = ai_question.to_json()
+        ai_question_json["config"] = {"is_streamed": False}
+        data = json.dumps(ai_question_json)
         print(data)
+
+        url = self.get_url("ai/ask")
         box_response = self._session.post(url, data=data, expect_json_response=True)
 
         response = box_response.json()
@@ -150,9 +154,13 @@ class AI(Cloneable):
             prompt=prompt,
         )
 
-    def _get_ai_api_response_streamed(self, prompt, data) -> AIAnswer:
-        url = self.get_url("ai/ask_streaming")
+    def _get_ai_api_response_streamed(self, prompt: str, ai_question: AIQuestion) -> AIAnswer:
+        ai_question_json = ai_question.to_json()
+        ai_question_json["config"] = {"is_streamed": True}
+        data = json.dumps(ai_question_json)
         print(data)
+
+        url = self.get_url("ai/ask")
         box_response = self._session.post(url, data=data, expect_json_response=False)
 
         for chunk in box_response.network_response.request_response.iter_lines():
@@ -196,9 +204,7 @@ class AI(Cloneable):
             mode=mode,
         )
 
-        data = json.dumps(ai_question.to_json())
-
-        return self._get_ai_api_response(prompt, data)
+        return self._get_ai_api_response(prompt, ai_question)
 
     @api_call
     def ask_item_streamed(self, mode: QAMode, prompt: str, items: [AIItem]) -> AIAnswer:
@@ -227,9 +233,7 @@ class AI(Cloneable):
             mode=mode,
         )
 
-        data = json.dumps(ai_question.to_json())
-
-        return self._get_ai_api_response_streamed(prompt, data)
+        return self._get_ai_api_response_streamed(prompt, ai_question)
 
     @api_call
     def ask_text_gen(
@@ -260,9 +264,7 @@ class AI(Cloneable):
             dialogue_history=dialogue_history,
         )
 
-        data = json.dumps(ai_question.to_json())
-
-        return self._get_ai_api_response(prompt, data)
+        return self._get_ai_api_response(prompt, ai_question)
 
     @api_call
     def ask_text_gen_streamed(
@@ -293,6 +295,4 @@ class AI(Cloneable):
             dialogue_history=dialogue_history,
         )
 
-        data = json.dumps(ai_question.to_json())
-
-        return self._get_ai_api_response_streamed(prompt, data)
+        return self._get_ai_api_response_streamed(prompt, ai_question)

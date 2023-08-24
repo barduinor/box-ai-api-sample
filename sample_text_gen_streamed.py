@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 
 from InquirerPy import inquirer
 
@@ -23,10 +24,9 @@ def main():
 
     client = get_client(conf)
 
-    # user = client.user().get()
-    print("\n---------------------")
-    print("AI Ask Demo - Text Gen")
-    print("----------------------")
+    print("\n---------------------------------")
+    print("AI Ask Demo - Text Gen - Streamed")
+    print("---------------------------------")
 
     box_ai = AI(client)
 
@@ -61,8 +61,7 @@ def main():
 
         for answer in answers:
             print(f"{answer.answer}", end="")
-            if "." in answer.answer:
-                print("\n")
+            sleep(0.1)  # just for effect ;)
             dialogue_history.append(answer)
 
 

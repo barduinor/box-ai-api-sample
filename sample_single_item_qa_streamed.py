@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 
 from InquirerPy import inquirer
 
@@ -56,8 +57,7 @@ def main():
 
         for answer in answers:
             print(f"{answer.answer}", end="")
-            if "." in answer.answer:
-                print("\n")
+            sleep(0.1)  # just for effect ;)
 
 
 if __name__ == "__main__":

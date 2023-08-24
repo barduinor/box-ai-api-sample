@@ -24,9 +24,9 @@ def main():
     client = get_client(conf)
 
     # user = client.user().get()
-    print("\n------------")
+    print("\n----------------------------")
     print("AI Ask Demo - Single Item QA")
-    print("------------")
+    print("----------------------------")
 
     file_selection = select_file(client)
     item = AIItem(

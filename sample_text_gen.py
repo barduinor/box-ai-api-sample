@@ -24,9 +24,9 @@ def main():
     client = get_client(conf)
 
     # user = client.user().get()
-    print("\n------------")
+    print("\n----------------------")
     print("AI Ask Demo - Text Gen")
-    print("------------")
+    print("----------------------")
 
     box_ai = AI(client)
 
