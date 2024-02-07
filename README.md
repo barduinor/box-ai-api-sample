@@ -29,8 +29,8 @@ You will need to have [python](https://www.python.org/downloads/) installed on y
 
 > Get the code
 ```bash
-git clone git@github.com:barduinor/box-python-oauth-template.git
-cd box-python-oauth-template
+git clone git@github.com:barduinor/box-ai-api-sample.git
+cd box-ai-api-sample
 ```
 
 > Set up your virtual environment
@@ -64,7 +64,7 @@ Enjoy
 
 
 ```bash
-python main.py
+python sample_single_item_qa.py
 ```
 
 The first time you run the application, it should open a web browser window and prompt you to log in to Box. 
